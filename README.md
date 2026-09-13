@@ -59,6 +59,37 @@ npm run dev -w @evinova/api   # API only, port 3000
 npm run dev -w @evinova/web   # frontend only, port 5173
 ```
 
+### Try it with some sample data
+
+With the app running, submit a few records so the list view has something to
+show:
+
+```bash
+curl -X POST http://localhost:3000/api/records/new \
+  -H "Content-Type: application/json" \
+  -d '{"text":"The app crashes every time I try to export a report to PDF."}'
+
+curl -X POST http://localhost:3000/api/records/new \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Would love a dark mode option, my eyes hurt after long sessions."}'
+
+curl -X POST http://localhost:3000/api/records/new \
+  -H "Content-Type: application/json" \
+  -d '{"text":"The new onboarding flow is fantastic, super smooth experience."}'
+```
+
+Each call responds immediately with the record in `pending` state; the AI
+worker classifies it in the background over the next few seconds. Refresh
+**http://localhost:5173** (or wait for its 90s auto-refresh) to see them move
+to `succeeded` with a category, sentiment, severity, summary, and suggested
+action filled in. You can also check a single record or the full list
+directly:
+
+```bash
+curl http://localhost:3000/api/records/all
+curl "http://localhost:3000/api/records/all?aggregate=category"
+```
+
 ## Testing
 
 ```bash
