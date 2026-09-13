@@ -80,7 +80,7 @@
 18. [x] Link id cells in the list view to the details view.
     commit: "feat: link list rows to details"
 
-19. [ ] Failing test for the sweeper's selection + claim logic. Describe the exact rule
+19. [x] Failing test for the sweeper's selection + claim logic. Describe the exact rule
     under test: a candidate record is one where EITHER (a) processingState is
     "pending" (regardless of lastAttemptAt — including lastAttemptAt: null, i.e.
     never yet attempted), OR (b) processingState is "processing" AND lastAttemptAt
