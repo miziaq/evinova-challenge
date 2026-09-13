@@ -107,6 +107,42 @@ describe("createFeedbackWorker", () => {
     expect(finalPatch.retries).toBe(maxRetries);
   });
 
+  it("reverts the record to pending and increments retries when the AI client throws", async () => {
+    const record = buildPendingRecord({ processingState: "pending", retries: 0 });
+    vi.mocked(aiClient.extractFeedback).mockRejectedValue(
+      new Error("Request timed out."),
+    );
+
+    const worker = createFeedbackWorker({ store, aiClient, maxRetries: 3 });
+    const before = Date.now();
+    await worker.processRecord(record);
+    const after = Date.now();
+
+    expect(store.update).toHaveBeenCalledTimes(1);
+    const [id, patch] = vi.mocked(store.update).mock.calls[0]!;
+    expect(id).toBe(record.id);
+    expect(patch.processingState).toBe("pending");
+    expect(patch.retries).toBe(1);
+    expect(patch.lastAttemptAt).toBeTruthy();
+    const lastAttemptAtMs = new Date(patch.lastAttemptAt as string).getTime();
+    expect(lastAttemptAtMs).toBeGreaterThanOrEqual(before);
+    expect(lastAttemptAtMs).toBeLessThanOrEqual(after);
+  });
+
+  it('marks the record "failed" when the AI client throws on the final retry', async () => {
+    const maxRetries = 1;
+    vi.mocked(aiClient.extractFeedback).mockRejectedValue(new Error("network error"));
+    const record = buildPendingRecord({ processingState: "pending", retries: 0 });
+
+    const worker = createFeedbackWorker({ store, aiClient, maxRetries });
+    await worker.processRecord(record);
+
+    expect(store.update).toHaveBeenCalledWith(
+      record.id,
+      expect.objectContaining({ processingState: "failed", retries: 1 }),
+    );
+  });
+
   it("short-circuits without calling aiClient when claim() returns false", async () => {
     vi.mocked(store.claim).mockReturnValue(false);
     const record = buildPendingRecord();

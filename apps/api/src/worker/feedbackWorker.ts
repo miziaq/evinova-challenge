@@ -7,8 +7,25 @@ export function createFeedbackWorker({
   aiClient,
   maxRetries,
 }: FeedbackWorkerDeps): FeedbackWorker {
+  function recordAttemptFailure(record: PendingFeedbackRecord): void {
+    const retries = record.retries + 1;
+    store.update(record.id, {
+      processingState: retries >= maxRetries ? "failed" : "pending",
+      retries,
+      lastAttemptAt: new Date().toISOString(),
+    });
+  }
+
   async function processClaimedRecord(record: PendingFeedbackRecord): Promise<void> {
-    const rawOutput = await aiClient.extractFeedback(record.originalText);
+    let rawOutput: unknown;
+    try {
+      rawOutput = await aiClient.extractFeedback(record.originalText);
+    } catch (error: unknown) {
+      console.error(`AI client call failed for record ${record.id}:`, error);
+      recordAttemptFailure(record);
+      return;
+    }
+
     const result = FeedbackContentSchema.safeParse(rawOutput);
 
     if (result.success) {
@@ -19,12 +36,7 @@ export function createFeedbackWorker({
       return;
     }
 
-    const retries = record.retries + 1;
-    store.update(record.id, {
-      processingState: retries >= maxRetries ? "failed" : "pending",
-      retries,
-      lastAttemptAt: new Date().toISOString(),
-    });
+    recordAttemptFailure(record);
   }
 
   return {
