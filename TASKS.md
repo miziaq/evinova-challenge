@@ -60,7 +60,7 @@
     concurrently script to run both apps with one command.
     commit: "chore: scaffold React frontend (Vite, AntDesign, Router)"
 
-15. [ ] Front-end: "/" list view via the unaggregated endpoint, AntDesign Table,
+15. [x] Front-end: "/" list view via the unaggregated endpoint, AntDesign Table,
     all columns including text; empty state = header + "no records available".
     commit: "feat: list view"
 

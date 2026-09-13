@@ -10,6 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@evinova/contracts": "*",
     "antd": "^6.6.3",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
