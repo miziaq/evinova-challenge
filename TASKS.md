@@ -26,7 +26,7 @@
    on the same id, only one succeeds.
    commit: "feat: atomic claim guard on the store (with test)"
 
-7. [ ] Wire claim() into the worker's entry point — only calls the AI client if claim()
+7. [x] Wire claim() into the worker's entry point — only calls the AI client if claim()
    returns true. Test that a failed claim short-circuits without calling aiClient.
    commit: "feat: worker calls claim() before processing"
 

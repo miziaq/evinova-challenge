@@ -106,4 +106,16 @@ describe("createFeedbackWorker", () => {
     expect(finalPatch.processingState).toBe("failed");
     expect(finalPatch.retries).toBe(maxRetries);
   });
+
+  it("short-circuits without calling aiClient when claim() returns false", async () => {
+    vi.mocked(store.claim).mockReturnValue(false);
+    const record = buildPendingRecord();
+
+    const worker = createFeedbackWorker({ store, aiClient, maxRetries: 3 });
+    await worker.processRecord(record);
+
+    expect(store.claim).toHaveBeenCalledWith(record.id);
+    expect(aiClient.extractFeedback).not.toHaveBeenCalled();
+    expect(store.update).not.toHaveBeenCalled();
+  });
 });

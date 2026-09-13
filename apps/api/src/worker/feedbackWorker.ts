@@ -9,6 +9,10 @@ export function createFeedbackWorker({
 }: FeedbackWorkerDeps): FeedbackWorker {
   return {
     async processRecord(record: PendingFeedbackRecord): Promise<void> {
+      if (!store.claim(record.id)) {
+        return;
+      }
+
       const rawOutput = await aiClient.extractFeedback(record.originalText);
       const result = FeedbackContentSchema.safeParse(rawOutput);
 
