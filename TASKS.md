@@ -64,7 +64,7 @@
     all columns including text; empty state = header + "no records available".
     commit: "feat: list view"
 
-16. [ ] Front-end: submittedAt header click toggles client-side sort direction (same
+16. [x] Front-end: submittedAt header click toggles client-side sort direction (same
     shape, no refetch needed). Separate explicit control (Select: "Group by:
     none / category / severity") swaps the table for the aggregate view.
     Above the table, when a grouping is active, render a one-line summary of the
