@@ -2,6 +2,7 @@ import type { FeedbackRecord, PendingFeedbackRecord } from "@evinova/contracts";
 
 export interface FeedbackStore {
   update(id: string, patch: Partial<FeedbackRecord>): void;
+  claim(id: string): boolean;
 }
 
 export interface AiClient {

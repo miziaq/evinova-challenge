@@ -21,7 +21,7 @@
 5. [x] Implement the retries-exhausted -> failed branch.
    commit: "feat: worker sets failed at max retries (green)"
 
-6. [ ] Add claim(id) to the store: synchronous check-and-flip from pending/stale-processing
+6. [x] Add claim(id) to the store: synchronous check-and-flip from pending/stale-processing
    to processing, returns false if already claimed. Unit test: two concurrent claims
    on the same id, only one succeeds.
    commit: "feat: atomic claim guard on the store (with test)"

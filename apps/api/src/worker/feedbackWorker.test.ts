@@ -22,7 +22,7 @@ describe("createFeedbackWorker", () => {
   let aiClient: AiClient;
 
   beforeEach(() => {
-    store = { update: vi.fn() };
+    store = { update: vi.fn(), claim: vi.fn().mockReturnValue(true) };
     aiClient = { extractFeedback: vi.fn() };
   });
 
