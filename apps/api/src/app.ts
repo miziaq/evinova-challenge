@@ -4,7 +4,7 @@ import type { RecordsRouterDeps } from "./routes/records.js";
 
 export type CreateAppDeps = RecordsRouterDeps;
 
-export function createApp({ store }: CreateAppDeps): Express {
+export function createApp({ store, worker }: CreateAppDeps): Express {
   const app = express();
   app.use(express.json());
 
@@ -12,7 +12,7 @@ export function createApp({ store }: CreateAppDeps): Express {
     res.status(200).json({ status: "ok" });
   });
 
-  app.use("/api/records", createRecordsRouter({ store }));
+  app.use("/api/records", createRecordsRouter({ store, worker }));
 
   return app;
 }

@@ -42,7 +42,7 @@
     AI processing completes.
     commit: "test: submission fires worker without blocking response (red)"
 
-11. [ ] Wire the real worker into the POST handler as fire-and-forget
+11. [x] Wire the real worker into the POST handler as fire-and-forget
     (errors caught/logged, never thrown into the response cycle).
     commit: "feat: submission triggers AI worker asynchronously (green)"
 

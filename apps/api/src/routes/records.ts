@@ -2,16 +2,17 @@ import { Router } from "express";
 import { randomUUID } from "node:crypto";
 import { SubmitFeedbackRequestSchema } from "@evinova/contracts";
 import type { FeedbackRecord } from "@evinova/contracts";
-import type { FeedbackStore } from "../worker/types.js";
+import type { FeedbackStore, FeedbackWorker } from "../worker/types.js";
 
 export interface RecordsRouterDeps {
   store: Pick<FeedbackStore, "update" | "claim"> & {
     add(record: FeedbackRecord): void;
     getById(id: string): FeedbackRecord | undefined;
   };
+  worker: FeedbackWorker;
 }
 
-export function createRecordsRouter({ store }: RecordsRouterDeps): Router {
+export function createRecordsRouter({ store, worker }: RecordsRouterDeps): Router {
   const router = Router();
 
   router.post("/new", (req, res) => {
@@ -38,6 +39,10 @@ export function createRecordsRouter({ store }: RecordsRouterDeps): Router {
     store.add(record);
 
     res.status(201).location(`/api/records/${record.id}`).json(record);
+
+    worker.processRecord(record).catch((error: unknown) => {
+      console.error(`AI processing failed for record ${record.id}:`, error);
+    });
   });
 
   router.get("/:id", (req, res) => {
