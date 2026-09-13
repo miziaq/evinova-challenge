@@ -14,7 +14,7 @@
    production aiClient, injected the same way the mock is.
    commit: "feat: AI worker satisfies scenarios (green)"
 
-4. [ ] Test: worker marks a record "failed" once retries reaches MAX_RETRIES
+4. [x] Test: worker marks a record "failed" once retries reaches MAX_RETRIES
    (plain Vitest, loop-calling the worker against an always-invalid mock).
    commit: "test: worker marks failed at max retries (red)"
 

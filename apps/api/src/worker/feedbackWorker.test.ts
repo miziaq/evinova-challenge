@@ -85,4 +85,25 @@ describe("createFeedbackWorker", () => {
     expect(lastAttemptAtMs).toBeGreaterThanOrEqual(before);
     expect(lastAttemptAtMs).toBeLessThanOrEqual(after);
   });
+
+  it('marks the record "failed" once retries reaches maxRetries', async () => {
+    const maxRetries = 3;
+    vi.mocked(aiClient.extractFeedback).mockResolvedValue({
+      category: "not-a-valid-category",
+    });
+
+    const worker = createFeedbackWorker({ store, aiClient, maxRetries });
+
+    let record = buildPendingRecord({ processingState: "pending", retries: 0 });
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      await worker.processRecord(record);
+      const [, patch] = vi.mocked(store.update).mock.calls[attempt]!;
+      record = { ...record, ...patch } as PendingFeedbackRecord;
+    }
+
+    expect(store.update).toHaveBeenCalledTimes(maxRetries);
+    const [, finalPatch] = vi.mocked(store.update).mock.calls[maxRetries - 1]!;
+    expect(finalPatch.processingState).toBe("failed");
+    expect(finalPatch.retries).toBe(maxRetries);
+  });
 });
