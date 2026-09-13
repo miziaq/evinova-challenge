@@ -73,7 +73,7 @@
     already fetched — no extra request.
     commit: "feat: sort toggle, aggregation control, and grouping summary text"
 
-17. [ ] Front-end: "/details/:id" via GET /api/records/:id, AntDesign List of all
+17. [x] Front-end: "/details/:id" via GET /api/records/:id, AntDesign List of all
     fields, error message on invalid/missing id, back button via useNavigate(-1).
     commit: "feat: record details view"
 
