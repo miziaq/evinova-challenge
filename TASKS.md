@@ -46,7 +46,7 @@
     (errors caught/logged, never thrown into the response cycle).
     commit: "feat: submission triggers AI worker asynchronously (green)"
 
-12. [ ] Test + implement GET /api/records/all, sorted by submittedAt.
+12. [x] Test + implement GET /api/records/all, sorted by submittedAt.
     Register this route BEFORE /api/records/:id.
     commit: "feat: list-all endpoint, sorted by submittedAt"
 

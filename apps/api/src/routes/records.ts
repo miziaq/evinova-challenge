@@ -8,6 +8,7 @@ export interface RecordsRouterDeps {
   store: Pick<FeedbackStore, "update" | "claim"> & {
     add(record: FeedbackRecord): void;
     getById(id: string): FeedbackRecord | undefined;
+    getAll(): FeedbackRecord[];
   };
   worker: FeedbackWorker;
 }
@@ -43,6 +44,13 @@ export function createRecordsRouter({ store, worker }: RecordsRouterDeps): Route
     worker.processRecord(record).catch((error: unknown) => {
       console.error(`AI processing failed for record ${record.id}:`, error);
     });
+  });
+
+  router.get("/all", (_req, res) => {
+    const records = [...store.getAll()].sort((a, b) =>
+      a.submittedAt.localeCompare(b.submittedAt),
+    );
+    res.status(200).json(records);
   });
 
   router.get("/:id", (req, res) => {

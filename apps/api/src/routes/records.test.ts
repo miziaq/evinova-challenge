@@ -88,6 +88,57 @@ describe("POST /api/records/new", () => {
   });
 });
 
+describe("GET /api/records/all", () => {
+  it("returns an empty array when there are no records", async () => {
+    const store = new InMemoryFeedbackStore();
+    const app = createApp({ store, worker: buildNoopWorker() });
+
+    const response = await request(app).get("/api/records/all");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+  });
+
+  it("returns all records sorted by submittedAt", async () => {
+    const store = new InMemoryFeedbackStore();
+    const app = createApp({ store, worker: buildNoopWorker() });
+    store.add({
+      id: "11111111-1111-4111-8111-111111111111",
+      submittedAt: "2026-06-29T12:00:00.000Z",
+      originalText: "Second submitted record, newer timestamp.",
+      processingState: "pending",
+      retries: 0,
+      lastAttemptAt: null,
+      category: null,
+      sentiment: null,
+      severity: null,
+      summary: null,
+      suggestedAction: null,
+    });
+    store.add({
+      id: "22222222-2222-4222-8222-222222222222",
+      submittedAt: "2026-06-29T10:00:00.000Z",
+      originalText: "First submitted record, older timestamp.",
+      processingState: "pending",
+      retries: 0,
+      lastAttemptAt: null,
+      category: null,
+      sentiment: null,
+      severity: null,
+      summary: null,
+      suggestedAction: null,
+    });
+
+    const response = await request(app).get("/api/records/all");
+
+    expect(response.status).toBe(200);
+    expect(response.body.map((record: { id: string }) => record.id)).toEqual([
+      "22222222-2222-4222-8222-222222222222",
+      "11111111-1111-4111-8111-111111111111",
+    ]);
+  });
+});
+
 describe("GET /api/records/:id", () => {
   it("returns 200 with the record when it exists", async () => {
     const store = new InMemoryFeedbackStore();
