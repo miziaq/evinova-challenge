@@ -109,6 +109,6 @@
     Lambda (Express via serverless-http) behind API Gateway.
     commit: "docs: CDK IaC description — Lambda + API Gateway"
 
-24. [ ] Add empty HARDENING.md and DECISIONS.md as placeholders to be filled in
+24. [x] Add empty HARDENING.md and DECISIONS.md as placeholders to be filled in
     after implementation is complete.
     commit: "docs: add empty HARDENING.md and DECISIONS.md"
