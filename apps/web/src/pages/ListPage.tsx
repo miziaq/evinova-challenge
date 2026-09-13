@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Space, Table, Typography, type TableColumnsType } from "antd";
+import { Link } from "react-router";
 import { CategorySchema, SeveritySchema } from "@evinova/contracts";
 import type { FeedbackRecord } from "@evinova/contracts";
 import { fetchAllRecords } from "../api/records.js";
@@ -76,7 +77,12 @@ export function ListPage() {
           setSortDirection((current) => (current === "ascend" ? "descend" : "ascend")),
       }),
     },
-    { title: "Id", dataIndex: "id", key: "id" },
+    {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+      render: (id: string) => <Link to={`/details/${id}`}>{id}</Link>,
+    },
     { title: "Text", dataIndex: "originalText", key: "originalText" },
     { title: "Status", dataIndex: "processingState", key: "processingState" },
     {

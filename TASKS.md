@@ -77,7 +77,7 @@
     fields, error message on invalid/missing id, back button via useNavigate(-1).
     commit: "feat: record details view"
 
-18. [ ] Link id cells in the list view to the details view.
+18. [x] Link id cells in the list view to the details view.
     commit: "feat: link list rows to details"
 
 19. [ ] Failing test for the sweeper's selection + claim logic. Describe the exact rule
