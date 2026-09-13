@@ -38,7 +38,7 @@
 9. [x] Implement submission endpoint + GET /api/records/:id (200 / 404).
    commit: "feat: submission + get-by-id endpoints (green)"
 
-10. [ ] Test: POST triggers the worker without awaiting it — response returns before
+10. [x] Test: POST triggers the worker without awaiting it — response returns before
     AI processing completes.
     commit: "test: submission fires worker without blocking response (red)"
 

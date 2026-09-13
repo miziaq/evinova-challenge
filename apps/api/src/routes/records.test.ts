@@ -1,12 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import request from "supertest";
 import { createApp } from "../app.js";
 import { InMemoryFeedbackStore } from "../store/inMemoryStore.js";
+import type { FeedbackWorker } from "../worker/types.js";
+
+function buildNoopWorker(): FeedbackWorker {
+  return { processRecord: vi.fn().mockResolvedValue(undefined) };
+}
 
 describe("POST /api/records/new", () => {
   it("returns 201 with a Location header on success", async () => {
     const store = new InMemoryFeedbackStore();
-    const app = createApp({ store });
+    const app = createApp({ store, worker: buildNoopWorker() });
 
     const response = await request(app)
       .post("/api/records/new")
@@ -18,7 +23,7 @@ describe("POST /api/records/new", () => {
 
   it("sets only id and text on the record, with system defaults for the rest", async () => {
     const store = new InMemoryFeedbackStore();
-    const app = createApp({ store });
+    const app = createApp({ store, worker: buildNoopWorker() });
     const text = "The export button crashes the app every time.";
 
     const response = await request(app)
@@ -48,7 +53,7 @@ describe("POST /api/records/new", () => {
 
   it("returns 400 when text is under 15 characters", async () => {
     const store = new InMemoryFeedbackStore();
-    const app = createApp({ store });
+    const app = createApp({ store, worker: buildNoopWorker() });
 
     const response = await request(app)
       .post("/api/records/new")
@@ -57,12 +62,36 @@ describe("POST /api/records/new", () => {
     expect(response.status).toBe(400);
     expect(store.getAll()).toHaveLength(0);
   });
+
+  it("triggers the worker without awaiting it — the response returns before processing completes", async () => {
+    const store = new InMemoryFeedbackStore();
+    let resolveProcessing!: () => void;
+    const processing = new Promise<void>((resolve) => {
+      resolveProcessing = resolve;
+    });
+    const worker: FeedbackWorker = {
+      processRecord: vi.fn().mockReturnValue(processing),
+    };
+    const app = createApp({ store, worker });
+
+    const response = await request(app)
+      .post("/api/records/new")
+      .send({ text: "The export button crashes the app every time." });
+
+    expect(response.status).toBe(201);
+    expect(worker.processRecord).toHaveBeenCalledTimes(1);
+    expect(worker.processRecord).toHaveBeenCalledWith(
+      expect.objectContaining({ id: response.body.id }),
+    );
+
+    resolveProcessing();
+  });
 });
 
 describe("GET /api/records/:id", () => {
   it("returns 200 with the record when it exists", async () => {
     const store = new InMemoryFeedbackStore();
-    const app = createApp({ store });
+    const app = createApp({ store, worker: buildNoopWorker() });
     const text = "The export button crashes the app every time.";
     const created = await request(app).post("/api/records/new").send({ text });
 
@@ -78,7 +107,7 @@ describe("GET /api/records/:id", () => {
 
   it("returns 404 when the record does not exist", async () => {
     const store = new InMemoryFeedbackStore();
-    const app = createApp({ store });
+    const app = createApp({ store, worker: buildNoopWorker() });
 
     const response = await request(app).get(
       "/api/records/11111111-1111-4111-8111-111111111111",
