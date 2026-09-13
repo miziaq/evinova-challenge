@@ -1,4 +1,4 @@
-1. [ ] Scaffold npm-workspaces monorepo (apps/api, apps/web, packages/contracts) in
+1. [x] Scaffold npm-workspaces monorepo (apps/api, apps/web, packages/contracts) in
    TypeScript throughout. Shared Zod schemas (pending + processed FeedbackRecord
    shapes) in packages/contracts. Bare-bones Express app in apps/api, TypeScript
    (ts-node/tsx or built via tsc), GET /health + test.
