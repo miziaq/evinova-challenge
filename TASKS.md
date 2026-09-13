@@ -4,7 +4,7 @@
    (ts-node/tsx or built via tsc), GET /health + test.
    commit: "chore: scaffold TypeScript monorepo, shared contracts, health check"
 
-2. [ ] Failing Gherkin-driven tests for the AI worker's two scenarios (valid → succeeded;
+2. [x] Failing Gherkin-driven tests for the AI worker's two scenarios (valid → succeeded;
    invalid → pending, retries+1, lastAttemptAt updated). Worker built via factory
    createFeedbackWorker({ store, aiClient, maxRetries }), store and aiClient both mocked.
    commit: "test: AI worker scenarios (red)"
