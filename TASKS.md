@@ -105,7 +105,7 @@
     in tests).
     commit: "docs: README run instructions"
 
-23. [ ] Add CDK IaC (describe-only, not deployed) provisioning this service as
+23. [x] Add CDK IaC (describe-only, not deployed) provisioning this service as
     Lambda (Express via serverless-http) behind API Gateway.
     commit: "docs: CDK IaC description — Lambda + API Gateway"
 

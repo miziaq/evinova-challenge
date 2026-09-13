@@ -144,3 +144,7 @@ vite.config.ts.timestamp-*
 
 # Environment file
 .env
+
+# CDK
+infra/cdk.out/
+infra/.cdk.staging/

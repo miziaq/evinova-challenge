@@ -88,3 +88,12 @@ npm run typecheck -w @evinova/web   # tsc --noEmit for the frontend
 npm run build -w @evinova/api       # compile the API to apps/api/dist
 npm run build -w @evinova/web       # production frontend build to apps/web/dist
 ```
+
+## Infrastructure (describe-only)
+
+`infra/` contains a CDK stack (`infra/lib/api-stack.ts`) describing the API as
+a Lambda behind API Gateway. It is not deployed as part of this challenge —
+`npm run synth -w @evinova/infra` renders the CloudFormation template locally
+for review, but nothing here calls `cdk deploy`. See the comments at the top
+of `api-stack.ts` for what would need to change (external store, no in-process
+sweeper) before this shape could actually run on Lambda.
