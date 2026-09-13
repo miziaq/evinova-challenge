@@ -30,7 +30,7 @@
    returns true. Test that a failed claim short-circuits without calling aiClient.
    commit: "feat: worker calls claim() before processing"
 
-8. [ ] Failing tests for POST /api/records/new: 201 + Location header on success;
+8. [x] Failing tests for POST /api/records/new: 201 + Location header on success;
    body sets only id (uuid) + text, with system defaults processingState: "pending",
    retries: 0, lastAttemptAt: null; 400 when text is under 15 chars.
    commit: "test: submission endpoint (red)"

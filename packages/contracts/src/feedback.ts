@@ -32,6 +32,12 @@ export const FeedbackContentSchema = z.object({
 });
 export type FeedbackContent = z.infer<typeof FeedbackContentSchema>;
 
+// Request body for submitting new feedback.
+export const SubmitFeedbackRequestSchema = z.object({
+  text: z.string().min(15),
+});
+export type SubmitFeedbackRequest = z.infer<typeof SubmitFeedbackRequestSchema>;
+
 // Shape of a record immediately after submission, before AI processing
 // fields are populated.
 export const PendingFeedbackRecordSchema = z.object({
