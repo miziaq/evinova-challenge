@@ -9,7 +9,7 @@
    createFeedbackWorker({ store, aiClient, maxRetries }), store and aiClient both mocked.
    commit: "test: AI worker scenarios (red)"
 
-3. [ ] Implement the worker factory against a placeholder in-memory store.
+3. [x] Implement the worker factory against a placeholder in-memory store.
    Wire the real Anthropic client (structured outputs + zodOutputFormat) as the
    production aiClient, injected the same way the mock is.
    commit: "feat: AI worker satisfies scenarios (green)"
