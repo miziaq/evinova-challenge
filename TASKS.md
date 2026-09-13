@@ -100,7 +100,7 @@
     aggregation mode is currently in state.
     commit: "feat: periodic front-end refresh"
 
-22. [ ] README.md: steps to run the app locally (install, env vars, start commands
+22. [x] README.md: steps to run the app locally (install, env vars, start commands
     for apps/api and apps/web), and note what's mocked/stubbed (e.g. AI client
     in tests).
     commit: "docs: README run instructions"
