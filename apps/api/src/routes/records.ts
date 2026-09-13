@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { SubmitFeedbackRequestSchema } from "@evinova/contracts";
 import type { FeedbackRecord } from "@evinova/contracts";
 import type { FeedbackStore, FeedbackWorker } from "../worker/types.js";
+import { AggregateDimensionSchema, aggregateRecords } from "./aggregateRecords.js";
 
 export interface RecordsRouterDeps {
   store: Pick<FeedbackStore, "update" | "claim"> & {
@@ -46,11 +47,24 @@ export function createRecordsRouter({ store, worker }: RecordsRouterDeps): Route
     });
   });
 
-  router.get("/all", (_req, res) => {
+  router.get("/all", (req, res) => {
     const records = [...store.getAll()].sort((a, b) =>
       a.submittedAt.localeCompare(b.submittedAt),
     );
-    res.status(200).json(records);
+
+    const { aggregate } = req.query;
+    if (aggregate === undefined) {
+      res.status(200).json(records);
+      return;
+    }
+
+    const parsed = AggregateDimensionSchema.safeParse(aggregate);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.flatten() });
+      return;
+    }
+
+    res.status(200).json(aggregateRecords(records, parsed.data));
   });
 
   router.get("/:id", (req, res) => {

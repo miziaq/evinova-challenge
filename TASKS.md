@@ -50,7 +50,7 @@
     Register this route BEFORE /api/records/:id.
     commit: "feat: list-all endpoint, sorted by submittedAt"
 
-13. [ ] Test + implement ?aggregate=category and ?aggregate=severity on the list endpoint.
+13. [x] Test + implement ?aggregate=category and ?aggregate=severity on the list endpoint.
     Unprocessed records (pending/processing/failed) bucket under one consistent
     "unprocessed" label for both dimensions.
     commit: "feat: aggregation by category/severity"
