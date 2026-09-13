@@ -35,7 +35,7 @@
    retries: 0, lastAttemptAt: null; 400 when text is under 15 chars.
    commit: "test: submission endpoint (red)"
 
-9. [ ] Implement submission endpoint + GET /api/records/:id (200 / 404).
+9. [x] Implement submission endpoint + GET /api/records/:id (200 / 404).
    commit: "feat: submission + get-by-id endpoints (green)"
 
 10. [ ] Test: POST triggers the worker without awaiting it — response returns before

@@ -58,3 +58,32 @@ describe("POST /api/records/new", () => {
     expect(store.getAll()).toHaveLength(0);
   });
 });
+
+describe("GET /api/records/:id", () => {
+  it("returns 200 with the record when it exists", async () => {
+    const store = new InMemoryFeedbackStore();
+    const app = createApp({ store });
+    const text = "The export button crashes the app every time.";
+    const created = await request(app).post("/api/records/new").send({ text });
+
+    const response = await request(app).get(`/api/records/${created.body.id}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      id: created.body.id,
+      originalText: text,
+      processingState: "pending",
+    });
+  });
+
+  it("returns 404 when the record does not exist", async () => {
+    const store = new InMemoryFeedbackStore();
+    const app = createApp({ store });
+
+    const response = await request(app).get(
+      "/api/records/11111111-1111-4111-8111-111111111111",
+    );
+
+    expect(response.status).toBe(404);
+  });
+});
