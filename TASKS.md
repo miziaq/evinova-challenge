@@ -92,7 +92,7 @@
     called exactly once per successfully claimed record, never for a skipped one.
     commit: "test: sweeper selection and claim logic (red)"
 
-20. [ ] Implement the sweeper: on each tick, find candidates per the rule above, call
+20. [x] Implement the sweeper: on each tick, find candidates per the rule above, call
     claim() per candidate, call the worker only on a successful claim.
     commit: "feat: sweeper implementation (green)"
 

@@ -6,7 +6,10 @@ import type { FeedbackWorker } from "../worker/types.js";
 import type { FeedbackRecord } from "@evinova/contracts";
 
 function buildNoopWorker(): FeedbackWorker {
-  return { processRecord: vi.fn().mockResolvedValue(undefined) };
+  return {
+    processRecord: vi.fn().mockResolvedValue(undefined),
+    processClaimedRecord: vi.fn().mockResolvedValue(undefined),
+  };
 }
 
 let nextId = 1;
@@ -91,6 +94,7 @@ describe("POST /api/records/new", () => {
     });
     const worker: FeedbackWorker = {
       processRecord: vi.fn().mockReturnValue(processing),
+      processClaimedRecord: vi.fn().mockResolvedValue(undefined),
     };
     const app = createApp({ store, worker });
 

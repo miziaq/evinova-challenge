@@ -17,4 +17,5 @@ export interface FeedbackWorkerDeps {
 
 export interface FeedbackWorker {
   processRecord(record: PendingFeedbackRecord): Promise<void>;
+  processClaimedRecord(record: PendingFeedbackRecord): Promise<void>;
 }

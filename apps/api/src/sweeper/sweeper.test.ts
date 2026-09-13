@@ -29,7 +29,10 @@ describe("createSweeper", () => {
 
   beforeEach(() => {
     store = { getAll: vi.fn().mockReturnValue([]), claim: vi.fn().mockReturnValue(true) };
-    worker = { processRecord: vi.fn().mockResolvedValue(undefined) };
+    worker = {
+      processRecord: vi.fn().mockResolvedValue(undefined),
+      processClaimedRecord: vi.fn().mockResolvedValue(undefined),
+    };
   });
 
   it("selects and claims a never-attempted pending record, then calls the worker", async () => {
@@ -44,8 +47,8 @@ describe("createSweeper", () => {
     await sweeper.sweep();
 
     expect(store.claim).toHaveBeenCalledWith(pending.id);
-    expect(worker.processRecord).toHaveBeenCalledTimes(1);
-    expect(worker.processRecord).toHaveBeenCalledWith(
+    expect(worker.processClaimedRecord).toHaveBeenCalledTimes(1);
+    expect(worker.processClaimedRecord).toHaveBeenCalledWith(
       expect.objectContaining({ id: pending.id }),
     );
   });
@@ -63,7 +66,7 @@ describe("createSweeper", () => {
     await sweeper.sweep();
 
     expect(store.claim).not.toHaveBeenCalled();
-    expect(worker.processRecord).not.toHaveBeenCalled();
+    expect(worker.processClaimedRecord).not.toHaveBeenCalled();
   });
 
   it("selects and claims a stale-processing record (lastAttemptAt > 3 min old)", async () => {
@@ -79,8 +82,8 @@ describe("createSweeper", () => {
     await sweeper.sweep();
 
     expect(store.claim).toHaveBeenCalledWith(stale.id);
-    expect(worker.processRecord).toHaveBeenCalledTimes(1);
-    expect(worker.processRecord).toHaveBeenCalledWith(
+    expect(worker.processClaimedRecord).toHaveBeenCalledTimes(1);
+    expect(worker.processClaimedRecord).toHaveBeenCalledWith(
       expect.objectContaining({ id: stale.id }),
     );
   });
@@ -97,7 +100,7 @@ describe("createSweeper", () => {
     await sweeper.sweep();
 
     expect(store.claim).toHaveBeenCalledWith(pending.id);
-    expect(worker.processRecord).not.toHaveBeenCalled();
+    expect(worker.processClaimedRecord).not.toHaveBeenCalled();
   });
 
   it("does not select succeeded or failed records", async () => {
@@ -116,7 +119,7 @@ describe("createSweeper", () => {
     await sweeper.sweep();
 
     expect(store.claim).not.toHaveBeenCalled();
-    expect(worker.processRecord).not.toHaveBeenCalled();
+    expect(worker.processClaimedRecord).not.toHaveBeenCalled();
   });
 
   it("processes exactly one candidate per successfully claimed record, skipping non-candidates", async () => {
@@ -154,11 +157,11 @@ describe("createSweeper", () => {
     expect(store.claim).not.toHaveBeenCalledWith(midFlight.id);
     expect(store.claim).not.toHaveBeenCalledWith(succeeded.id);
 
-    expect(worker.processRecord).toHaveBeenCalledTimes(2);
-    expect(worker.processRecord).toHaveBeenCalledWith(
+    expect(worker.processClaimedRecord).toHaveBeenCalledTimes(2);
+    expect(worker.processClaimedRecord).toHaveBeenCalledWith(
       expect.objectContaining({ id: neverAttempted.id }),
     );
-    expect(worker.processRecord).toHaveBeenCalledWith(
+    expect(worker.processClaimedRecord).toHaveBeenCalledWith(
       expect.objectContaining({ id: stale.id }),
     );
   });

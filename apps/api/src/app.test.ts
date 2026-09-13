@@ -6,7 +6,10 @@ import type { FeedbackWorker } from "./worker/types.js";
 
 describe("GET /health", () => {
   it("returns 200 with an ok status", async () => {
-    const worker: FeedbackWorker = { processRecord: vi.fn().mockResolvedValue(undefined) };
+    const worker: FeedbackWorker = {
+      processRecord: vi.fn().mockResolvedValue(undefined),
+      processClaimedRecord: vi.fn().mockResolvedValue(undefined),
+    };
     const app = createApp({ store: new InMemoryFeedbackStore(), worker });
 
     const response = await request(app).get("/health");
