@@ -5,6 +5,7 @@ import type { FeedbackWorker, FeedbackWorkerDeps } from "./types.js";
 export function createFeedbackWorker({
   store,
   aiClient,
+  maxRetries,
 }: FeedbackWorkerDeps): FeedbackWorker {
   return {
     async processRecord(record: PendingFeedbackRecord): Promise<void> {
@@ -19,9 +20,10 @@ export function createFeedbackWorker({
         return;
       }
 
+      const retries = record.retries + 1;
       store.update(record.id, {
-        processingState: "pending",
-        retries: record.retries + 1,
+        processingState: retries >= maxRetries ? "failed" : "pending",
+        retries,
         lastAttemptAt: new Date().toISOString(),
       });
     },

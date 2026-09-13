@@ -18,7 +18,7 @@
    (plain Vitest, loop-calling the worker against an always-invalid mock).
    commit: "test: worker marks failed at max retries (red)"
 
-5. [ ] Implement the retries-exhausted -> failed branch.
+5. [x] Implement the retries-exhausted -> failed branch.
    commit: "feat: worker sets failed at max retries (green)"
 
 6. [ ] Add claim(id) to the store: synchronous check-and-flip from pending/stale-processing
