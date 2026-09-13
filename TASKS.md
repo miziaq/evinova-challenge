@@ -96,7 +96,7 @@
     claim() per candidate, call the worker only on a successful claim.
     commit: "feat: sweeper implementation (green)"
 
-21. [ ] Front-end: setInterval refresh every 90s, refetching using whatever sort/
+21. [x] Front-end: setInterval refresh every 90s, refetching using whatever sort/
     aggregation mode is currently in state.
     commit: "feat: periodic front-end refresh"
 

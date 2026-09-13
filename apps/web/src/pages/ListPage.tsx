@@ -6,6 +6,7 @@ import type { FeedbackRecord } from "@evinova/contracts";
 import { fetchAllRecords } from "../api/records.js";
 
 const UNPROCESSED = "unprocessed";
+const REFRESH_INTERVAL_MS = 90 * 1000;
 
 function buildCountSummary(
   records: FeedbackRecord[],
@@ -33,20 +34,26 @@ export function ListPage() {
   useEffect(() => {
     let cancelled = false;
 
-    fetchAllRecords()
-      .then((data) => {
-        if (!cancelled) {
-          setRecords(data);
-        }
-      })
-      .finally(() => {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      });
+    function refresh(): void {
+      fetchAllRecords()
+        .then((data) => {
+          if (!cancelled) {
+            setRecords(data);
+          }
+        })
+        .finally(() => {
+          if (!cancelled) {
+            setLoading(false);
+          }
+        });
+    }
+
+    refresh();
+    const intervalId = setInterval(refresh, REFRESH_INTERVAL_MS);
 
     return () => {
       cancelled = true;
+      clearInterval(intervalId);
     };
   }, []);
 
