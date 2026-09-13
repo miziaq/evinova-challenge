@@ -54,7 +54,7 @@
     Unprocessed records (pending/processing/failed) bucket under one consistent
     "unprocessed" label for both dimensions.
     commit: "feat: aggregation by category/severity"
-14. [ ] Scaffold apps/web: Vite + React + TypeScript, AntDesign (antd) installed,
+14. [x] Scaffold apps/web: Vite + React + TypeScript, AntDesign (antd) installed,
     React Router configured with placeholder routes for "/" and "/details/:id"
     (no feature logic yet). Vite dev server proxy for /api → apps/api. Root-level
     concurrently script to run both apps with one command.

@@ -9,6 +9,10 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev -w @evinova/api\" \"npm run dev -w @evinova/web\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
   }
 }
