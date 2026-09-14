@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+**/dist
+**/cdk.out
+.git
+.env
+.env.*
+!.env.example
+*.log
+
+# Only apps/api and packages/contracts are needed to build the API image.
+infra
+apps/web
+*.md
+!apps/**/*.md

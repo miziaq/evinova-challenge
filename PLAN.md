@@ -30,7 +30,7 @@ Feature: AI feedback extraction
     When the AI processing worker runs for that record
     And the AI model returns output that fails the FeedbackContent schema
     Then the record's processingState reverts to "pending"
-    And the record's retries increments to 1
+    And the record's retries increments by 1
     And the lastAttemptAt is set to current timestamp
 ```
 

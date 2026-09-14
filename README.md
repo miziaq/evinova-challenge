@@ -123,8 +123,11 @@ npm run build -w @evinova/web       # production frontend build to apps/web/dist
 ## Infrastructure (describe-only)
 
 `infra/` contains a CDK stack (`infra/lib/api-stack.ts`) describing the API as
-a Lambda behind API Gateway. It is not deployed as part of this challenge —
-`npm run synth -w @evinova/infra` renders the CloudFormation template locally
-for review, but nothing here calls `cdk deploy`. See the comments at the top
-of `api-stack.ts` for what would need to change (external store, no in-process
-sweeper) before this shape could actually run on Lambda.
+an [App Runner](https://aws.amazon.com/apprunner/) service, built from
+`apps/api/Dockerfile`. It is not deployed as part of this challenge —
+`npm run synth -w @evinova/infra` builds the container image locally and
+renders the CloudFormation template for review, but nothing here calls
+`cdk deploy`. See the comments at the top of `api-stack.ts` for why App
+Runner (one continuously-running container) rather than Lambda: this app's
+in-memory store and `setInterval` sweeper both assume a single long-lived
+process, which Lambda's per-invocation execution model doesn't guarantee.
