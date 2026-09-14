@@ -43,7 +43,7 @@ export type SubmitFeedbackRequest = z.infer<typeof SubmitFeedbackRequestSchema>;
 export const PendingFeedbackRecordSchema = z.object({
   id: z.string().uuid(),
   submittedAt: z.string().datetime(),
-  originalText: z.string().min(15),
+  originalText: z.string().min(15).max(1000),
   processingState: ProcessingStateSchema,
   retries: z.number().int().min(0),
   lastAttemptAt: z.string().datetime().nullable(),
